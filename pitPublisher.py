@@ -58,7 +58,7 @@ def get_next_match(team, event):
     team_matches = sorted(tba.team_matches(team, event), key=lambda match: match['time'])
     next_match = team_matches[-1]
     for match in team_matches:
-        if match['post_result_time'] < 100000: # todo: check behaviour of this on real TBA feed.
+        if match['post_result_time'] is None:
             next_match = match
             break
     return next_match
