@@ -1,0 +1,8 @@
+red1:inova:slim0123
+red2:inova:slim0e8
+red3:inova:slim0104
+blue1:inova:slim0e4
+blue2:inova:slim0e10
+blue3:inova:slim0913
+info1:inova:slim0c1c
+info2:inova:slim0db
