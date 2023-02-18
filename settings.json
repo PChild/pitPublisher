@@ -4,6 +4,13 @@
     "delay": 15.0,
     "key": "0h3KMIxalFClzq9o00U2NPG9o2NHrQTTCVkGjv82cxQfeTp0ul49LYv15rH1nk7e",
     "signs": [
-        {"name": "red1", "pass": "slim0123"}
+        {"hostname": "red1", "username" : "inova", "pass": "slim0123"}
+		{"hostname": "red2", "username" : "inova", "pass": "slim0e8"}
+		{"hostname": "red3", "username" : "inova", "pass": "slim0104"}
+		{"hostname": "blue1", "username" : "inova", "pass": "slim0e4"}
+		{"hostname": "blue2", "username" : "inova", "pass": "slim0e10"}
+		{"hostname": "blue3", "username" : "inova", "pass": "slim0913"}
+		{"hostname": "info1", "username" : "inova", "pass": "slim0c1c"}
+		{"hostname": "info2", "username" : "inova", "pass": "slim0db"}
     ]
 }
