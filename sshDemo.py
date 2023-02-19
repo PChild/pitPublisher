@@ -1,6 +1,6 @@
 from fabric import Connection
 
-sign = {'name': 'red1', 'pass': 'slim0123'}
+sign = {"name": "blue3.", "pass": "slim0913"}
 
 conn = Connection('inova@'+sign['name'], connect_kwargs={'password':sign['pass']})
 conn.run("localmsgs delete -f ALL")

@@ -11,7 +11,7 @@ tba = tbapy.TBA(settings['key'])
 # todo: assign hostnames based on roles for all signs. This makes this code noop currently.
 signs = settings['signs']
 
-displayed_match = None
+displayed_match = ''
 
 # basic function to update an individual sign with specified text and color. 
 def update_sign(conn, text):
@@ -87,7 +87,10 @@ def check_match_status():
         
 def main():
     init_signs()
-    
+
     while True:
         check_match_status()
         time.sleep(settings['delay'])
+        
+if __name__ == "__main__":
+    main()
