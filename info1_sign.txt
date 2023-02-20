@@ -1,0 +1,5 @@
+llm_builder.llm new_msg 0,0,16,96 "normal"
+llm_builder.llm add_region 0,0,8,96 "1" "appear" "appear" "fastest" "16000" "left" "middle"
+llm_builder.llm add_text 0,0,8,96 "1" "8" "normal" "block" "normal" "red" "black" "none" "none" "--" "R1   401"
+llm_builder.llm add_region 8,0,8,96 "1" "scroll_up" "scroll_up" "slowest" "6000" "left" "bottom"   
+llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "yellow" "black" "none" "none" "--" "Copperhead Robotics"
