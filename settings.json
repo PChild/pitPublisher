@@ -5,12 +5,13 @@
     "key": "0h3KMIxalFClzq9o00U2NPG9o2NHrQTTCVkGjv82cxQfeTp0ul49LYv15rH1nk7e",
     "signs": [
         {"name": "red1", "pass": "slim0123"},
-		{"name": "red3", "pass": "slim0104"},
+	{"name": "red3", "pass": "slim0104"},
         {"name": "red2", "pass": "slim0e8"},
-		{"name": "blue1", "pass": "slim0e4"},
-		{"name": "blue2", "pass": "slim0e10"},
-		{"name": "blue3", "pass": "slim0913"},
-		{"name": "info1", "pass": "slim0c1c"},
-		{"name": "info2", "pass": "slim0db"}
+	{"name": "blue1", "pass": "slim0e4"},
+	{"name": "blue2", "pass": "slim0e10"},
+	{"name": "blue3", "pass": "slim0913"},
+	{"name": "info1", "pass": "slim0c1c"},
+	{"name": "info2", "pass": "slim0db"},
+	{"name": "spare1", "pass": "slim0d5"}
     ]
 }
