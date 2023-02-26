@@ -1,0 +1,9 @@
+Host *
+#	PubKeyAcceptedKeyTypes +aes128-cbc
+	KexAlgorithms +diffie-hellman-group1-sha1
+	HostKeyAlgorithms +ssh-rsa
+	MACs hmac-sha1
+	
+Host spare1
+	KexAlgorithms +diffie-hellman-group1-sha1
+	HostKeyAlgorithms +ssh-dss
