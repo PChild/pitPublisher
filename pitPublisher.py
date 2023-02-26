@@ -32,7 +32,7 @@ def init_signs():
 
     threads = []
     for conn in connections:
-        t = Thread(target=update_sign, args=(conn, conn.host))
+        t = Thread(target=update_sign, args=(conn, "abby is sus"))
         threads.append(t)
         t.start()
 
@@ -79,7 +79,9 @@ def check_match_status():
     if next_match['match_number'] != displayed_match:
         red_teams = format_team_keys(next_match['alliances']['red']['team_keys'])
         blue_teams = format_team_keys(next_match['alliances']['blue']['team_keys'])
-        update_displays(red_teams, blue_teams, next_match['match_number'], 0) # todo: fetch actual time from matches
+        
+        match_time = time.strftime('%a %I:%M %p', time.localtime(next_match['time']))
+        update_displays(red_teams, blue_teams, next_match['match_number'], match_time)
         
         # store that we updated the match so we don't need perform an update for this match again.
         displayed_match = next_match['match_number']
@@ -88,7 +90,7 @@ def check_match_status():
 def main():
     init_signs()
 
-    while True:
+    while False:
         check_match_status()
         time.sleep(settings['delay'])
         
