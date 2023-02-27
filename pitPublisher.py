@@ -1,5 +1,6 @@
 from fabric import Connection
 from threading import Thread
+from colorama import Fore
 import tbapy
 import time
 import json
@@ -26,13 +27,29 @@ def update_sign(conn, text):
     conn.run("localmsgs compose -c %s -d 0 -f test.llm -p appear -s 11 -t '%s'" % (color, text.upper()), hide=True)
     conn.close()
     
+def sim_update_sign(conn, text):
+    # use the hostname to choose color to apply.
+    color = Fore.YELLOW
+    if 'red' in conn:
+        color = Fore.RED
+    elif 'blue' in conn:
+        color = Fore.GREEN
+        
+    print(color + str(text))
+    
 # initialize displays to show their role
-def init_signs():
-    connections = [Connection('inova@'+sign['name'], connect_kwargs={'password':sign['pass']}) for sign in signs]
+def init_signs(is_sim):
+    if is_sim:
+        connections = signs
+    else:
+        connections = [Connection('inova@'+sign['name'], connect_kwargs={'password':sign['pass']}) for sign in signs]
 
     threads = []
     for conn in connections:
-        t = Thread(target=update_sign, args=(conn, "abby is sus"))
+        if is_sim:
+            t = Thread(target=sim_update_sign, args=(conn['name'], conn['name']))
+        else:
+            t = Thread(target=update_sign, args=(conn, conn.host))
         threads.append(t)
         t.start()
 
@@ -40,13 +57,19 @@ def init_signs():
         t.join()
 
 # takes in red and blue teams, and basic match info to update all displays in parallel
-def update_displays(red_teams, blue_teams, match_num, match_time):
-    connections = [Connection('inova@'+sign['name'], connect_kwargs={'password':sign['pass']}) for sign in signs]
-    sign_data = red_teams + blue_teams + [match_num] + [match_time] # this concatenation means the sign list order matters
+def update_displays(red_teams, blue_teams, match_num, match_time, is_sim=False):
+    if is_sim:
+        connections = signs
+    else:
+        connections = [Connection('inova@'+sign['name'], connect_kwargs={'password':sign['pass']}) for sign in signs]
+    sign_data = [match_num] + red_teams + [match_time] + blue_teams # this concatenation means the sign list order matters
     
     threads = []
     for idx, conn in enumerate(connections):
-        t = Thread(target=update_sign, args=(conn, sign_data[idx]))
+        if is_sim:
+            t = Thread(target=sim_update_sign, args=(conn['name'], sign_data[idx]))
+        else:
+            t = Thread(target=update_sign, args=(conn, sign_data[idx]))
         threads.append(t)
         t.start()
     
@@ -66,32 +89,34 @@ def get_next_match(team, event):
 # remove leading 'FRC' from team keys, prepend _ to pad text, account for 3 and 4 digit teams with a padder
 def format_team_keys(team_keys):
     fixed_list = []
-    for idx, t in team_keys:
-        padder = ' ' if len(t) > 6 else ''
+    for idx, t in enumerate(team_keys):
+        padder = ' ' * (7 - len(t))
         fixed_list.append('_' + str(idx + 1) + ': ' + padder + t[3:])
     
     return fixed_list        
 
 # Check if the signs need to be updated
-def check_match_status():   
-    next_match = get_next_match(settings['team'], settings['event'])        
+def check_match_status(is_sim=False):   
+    global displayed_match
+    next_match = get_next_match(settings['team'], settings['event'])
     
     if next_match['match_number'] != displayed_match:
         red_teams = format_team_keys(next_match['alliances']['red']['team_keys'])
         blue_teams = format_team_keys(next_match['alliances']['blue']['team_keys'])
         
         match_time = time.strftime('%a %I:%M %p', time.localtime(next_match['time']))
-        update_displays(red_teams, blue_teams, next_match['match_number'], match_time)
+        update_displays(red_teams, blue_teams, next_match['comp_level'].upper() + str(next_match['match_number']), match_time, is_sim)
         
         # store that we updated the match so we don't need perform an update for this match again.
         displayed_match = next_match['match_number']
         
         
 def main():
-    init_signs()
+    is_sim = settings['is_sim']
+    init_signs(is_sim)
 
-    while False:
-        check_match_status()
+    while True:
+        check_match_status(is_sim)
         time.sleep(settings['delay'])
         
 if __name__ == "__main__":

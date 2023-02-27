@@ -1,17 +1,17 @@
 {
     "event": "2023week0",
     "team": "frc125",
+    "is_sim": true,
     "delay": 15.0,
     "key": "0h3KMIxalFClzq9o00U2NPG9o2NHrQTTCVkGjv82cxQfeTp0ul49LYv15rH1nk7e",
     "signs": [
-        {"name": "info1", "pass": "slim0e4"}, //A1
-        {"name": "red1", "pass": "slim0e8"}, // A2
-        {"name": "red2", "pass": "slim0123"}, //A3
-		{"name": "red3", "pass": "slim0104"}, // A4
-        
-        {"name": "info2", "pass": "slim0db"}, //B1
-		{"name": "blue1", "pass": "slim0e10"}, //B2
-        {"name": "blue2", "pass": "slim0c1c"}, //B3
-		{"name": "blue3", "pass": "slim0913"} //B4
+        {"name": "info1", "pass": "slim0e4", "loc": "a1"},
+        {"name": "red1", "pass": "slim0e8", "loc": "a2"},
+        {"name": "red2", "pass": "slim0123", "loc": "a3"},
+		{"name": "red3", "pass": "slim0104", "loc": "a4"},
+        {"name": "info2", "pass": "slim0db", "loc": "b1"},
+		{"name": "blue1", "pass": "slim0e10", "loc": "b2"},
+        {"name": "blue2", "pass": "slim0c1c", "loc": "b3"},
+		{"name": "blue3", "pass": "slim0913", "loc": "b4"}
     ]
 }
