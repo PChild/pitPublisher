@@ -25,7 +25,7 @@ def update_sign(conn, text):
         color = 'green'
         
     conn.run("localmsgs delete -f ALL")
-    conn.run("localmsgs compose -c %s -d 0 -f test.llm -p appear -s 11 -t '%s'" % (color, text.upper()), hide=True)
+    conn.run("localmsgs compose -c %s -d 0 -f test.llm -p appear -s 11 -t '%s'" % (color, str(text).upper()), hide=True)
     conn.close()
     
 def sim_update_sign(conn, text):
