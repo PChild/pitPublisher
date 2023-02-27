@@ -7,11 +7,9 @@ import json
 
 settings = json.load( open('settings.json') )
 is_sim = settings['is_sim']
-tba = tbapy.TBA(settings['key'])
-
-# ordering should be red, blue, match #, match time because of enumeration in update_displays()
-# todo: assign hostnames based on roles for all signs. This makes this code noop currently.
 signs = settings['signs']
+
+tba = tbapy.TBA(settings['key'])
 
 displayed_match = ''
 
@@ -25,11 +23,12 @@ def update_sign(conn, text):
         color = 'green'
         
     conn.run("localmsgs delete -f ALL")
-    conn.run("localmsgs compose -c %s -d 0 -f test.llm -p appear -s 11 -t '%s'" % (color, str(text).upper()), hide=True)
+    conn.run("localmsgs compose -c %s -d 0 -f test.llm -p appear -s 11 -t '%s'" % (color, str(text).upper()))
     conn.close()
-    
+
+# simulate sign updates in the terminal instead of on real hardware. 
+# Colors, spacing should match. Sign ordering is nondeterministic, I think.
 def sim_update_sign(conn, text):
-    # use the hostname to choose color to apply.
     color = Fore.YELLOW
     if 'red' in conn:
         color = Fore.RED
@@ -111,9 +110,9 @@ def check_match_status():
         # store that we updated the match so we don't need perform an update for this match again.
         displayed_match = next_match['match_number']
         
-        
+# Main function to run code.  
 def main():
-    init_signs()
+    # init_signs()
 
     while True:
         check_match_status()
