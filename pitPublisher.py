@@ -6,6 +6,7 @@ import time
 import json
 
 settings = json.load( open('settings.json') )
+is_sim = settings['is_sim']
 tba = tbapy.TBA(settings['key'])
 
 # ordering should be red, blue, match #, match time because of enumeration in update_displays()
@@ -38,7 +39,7 @@ def sim_update_sign(conn, text):
     print(color + str(text))
     
 # initialize displays to show their role
-def init_signs(is_sim):
+def init_signs():
     if is_sim:
         connections = signs
     else:
@@ -57,7 +58,7 @@ def init_signs(is_sim):
         t.join()
 
 # takes in red and blue teams, and basic match info to update all displays in parallel
-def update_displays(red_teams, blue_teams, match_num, match_time, is_sim=False):
+def update_displays(red_teams, blue_teams, match_num, match_time):
     if is_sim:
         connections = signs
     else:
@@ -96,7 +97,7 @@ def format_team_keys(team_keys):
     return fixed_list        
 
 # Check if the signs need to be updated
-def check_match_status(is_sim=False):   
+def check_match_status():   
     global displayed_match
     next_match = get_next_match(settings['team'], settings['event'])
     
@@ -105,18 +106,17 @@ def check_match_status(is_sim=False):
         blue_teams = format_team_keys(next_match['alliances']['blue']['team_keys'])
         
         match_time = time.strftime('%a %I:%M %p', time.localtime(next_match['time']))
-        update_displays(red_teams, blue_teams, next_match['comp_level'].upper() + str(next_match['match_number']), match_time, is_sim)
+        update_displays(red_teams, blue_teams, next_match['comp_level'].upper() + str(next_match['match_number']), match_time)
         
         # store that we updated the match so we don't need perform an update for this match again.
         displayed_match = next_match['match_number']
         
         
 def main():
-    is_sim = settings['is_sim']
-    init_signs(is_sim)
+    init_signs()
 
     while True:
-        check_match_status(is_sim)
+        check_match_status()
         time.sleep(settings['delay'])
         
 if __name__ == "__main__":
