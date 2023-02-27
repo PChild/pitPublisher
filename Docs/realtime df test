@@ -1,0 +1,3 @@
+new_message.llm new_msg 0,0,16,96 "panel" 
+new_message.llm add_region 0,48,8,48 "1" "appear" "scroll_up" "fastest" "20000" "center" "bottom" 
+new_message.llm add_df 0,48,8,48 "1" "8" "normal" "block" "normal" "red" "black" "none" "none" "time" "REALTIME" "65534,65534,1" "24_HH_MM" "ALIGNC" "0" 
