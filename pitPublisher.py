@@ -12,6 +12,8 @@ signs = settings['signs']
 tba = tbapy.TBA(settings['key'])
 
 displayed_match = ''
+red_teams = []
+blue_teams = []
 
 # basic function to update an individual sign with specified text and color. 
 def update_sign(conn, text):
@@ -35,7 +37,7 @@ def sim_update_sign(conn, text):
     elif 'blue' in conn:
         color = Fore.GREEN
         
-    print(color + str(text))
+    print(color + str(text) + Fore.WHITE)
     
 # initialize displays to show their role
 def init_signs():
@@ -97,10 +99,14 @@ def format_team_keys(team_keys):
 
 # Check if the signs need to be updated
 def check_match_status():   
-    global displayed_match
+    global displayed_match, red_teams, blue_teams
     next_match = get_next_match(settings['team'], settings['event'])
     
-    if next_match['match_number'] != displayed_match:
+    new_match = next_match['match_number'] != displayed_match
+    new_red_teams = format_team_keys(next_match['alliances']['red']['team_keys']) != red_teams
+    new_blue_teams = format_team_keys(next_match['alliances']['blue']['team_keys']) != blue_teams
+    
+    if new_match or new_red_teams or new_blue_teams:
         red_teams = format_team_keys(next_match['alliances']['red']['team_keys'])
         blue_teams = format_team_keys(next_match['alliances']['blue']['team_keys'])
         
