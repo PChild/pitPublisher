@@ -44,8 +44,8 @@ def update_displays(red_teams, blue_teams, match_num, match_time):
     
     threads = []
     for idx, conn in enumerate(connections):
-        args = (conn['name'], sign_data[idx]) if is_sim else (conn, sign_data[idx])
-        t = Thread(target=update_sign, args=args)
+        conn = conn['name'] if is_sim else conn #use sign name as connection if sim
+        t = Thread(target=update_sign, args=(conn, sign_data[idx]))
         threads.append(t)
         t.start()
     
