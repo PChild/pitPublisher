@@ -6,7 +6,6 @@ import time
 import json
 
 settings = json.load( open('settings.json') )
-is_sim = settings['is_sim']
 signs = settings['signs']
 
 tba = tbapy.TBA(settings['key'])
@@ -29,8 +28,7 @@ def update_sign(conn, text):
     conn.close()
 
 # simulate sign updates in the terminal instead of on real hardware. 
-# Colors, spacing 
-# should match. Sign ordering is nondeterministic, I think.
+# Colors, spacing should match. Sign ordering is nondeterministic, I think.
 def sim_update_sign(conn, text):
     color = Fore.YELLOW
     if 'red' in conn:
@@ -40,27 +38,10 @@ def sim_update_sign(conn, text):
         
     print(color + str(text) + Fore.WHITE)
     
-# initialize displays to show their role
-def init_signs():
-    if is_sim:
-        connections = signs
-    else:
-        connections = [Connection('inova@'+sign['name'], connect_kwargs={'password':sign['pass']}) for sign in signs]
-
-    threads = []
-    for conn in connections:
-        if is_sim:
-            t = Thread(target=sim_update_sign, args=(conn['name'], conn['name']))
-        else:
-            t = Thread(target=update_sign, args=(conn, conn.host))
-        threads.append(t)
-        t.start()
-
-    for t in threads:
-        t.join()
-
 # takes in red and blue teams, and basic match info to update all displays in parallel
 def update_displays(red_teams, blue_teams, match_num, match_time):
+    is_sim = settings['is_sim']
+    
     if is_sim:
         connections = signs
     else:
@@ -89,16 +70,16 @@ def get_next_match(team, event):
             break
     return next_match
 
-# remove leading 'FRC' from team keys, prepend _ to pad text, account for 3 and 4 digit teams with a padder
+# remove leading 'FRC' from team keys, prepend _ to pad text, account for 1 to 4 digit teams with a padder
 def format_team_keys(team_keys):
     fixed_list = []
-    for idx, t in enumerate(team_keys):
+    for idx, t in enumerate(team_keys[:3]):
         padder = ' ' * (7 - len(t))
         fixed_list.append('_' + str(idx + 1) + ': ' + padder + t[3:])
     
     return fixed_list        
 
-# Check if the signs need to be updated
+# Check if the signs need to be updated by comparing match #, team #s
 def check_match_status():   
     global displayed_match, red_teams, blue_teams
     next_match = get_next_match(settings['team'], settings['event'])
@@ -119,8 +100,6 @@ def check_match_status():
         
 # Main function to run code.  
 def main():
-    # init_signs()
-
     while True:
         check_match_status()
         time.sleep(settings['delay'])
