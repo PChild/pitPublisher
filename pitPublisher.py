@@ -25,11 +25,12 @@ def update_sign(conn, text):
         color = 'green'
         
     conn.run("localmsgs delete -f ALL")
-    conn.run("localmsgs compose -c %s -d 0 -f test.llm -p appear -s 11 -t '%s'" % (color, str(text).upper()))
+    conn.run("localmsgs compose -c %s -d 0 -f test.llm -p appear -s 16 -t '%s'" % (color, str(text).upper()))
     conn.close()
 
 # simulate sign updates in the terminal instead of on real hardware. 
-# Colors, spacing should match. Sign ordering is nondeterministic, I think.
+# Colors, spacing 
+# should match. Sign ordering is nondeterministic, I think.
 def sim_update_sign(conn, text):
     color = Fore.YELLOW
     if 'red' in conn:
@@ -110,7 +111,7 @@ def check_match_status():
         red_teams = format_team_keys(next_match['alliances']['red']['team_keys'])
         blue_teams = format_team_keys(next_match['alliances']['blue']['team_keys'])
         
-        match_time = time.strftime('%a %I:%M %p', time.localtime(next_match['time']))
+        match_time = time.strftime('%I:%M %p', time.localtime(next_match['time']))
         update_displays(red_teams, blue_teams, next_match['comp_level'].upper() + str(next_match['match_number']), match_time)
         
         # store that we updated the match so we don't need perform an update for this match again.
