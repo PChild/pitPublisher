@@ -21,25 +21,29 @@ team_names = {}
 current_match = 'NM-2'
 
 team_sign_text = Template('''
-llm_builder.llm new_msg 0,0,16,96 "normal"
-llm_builder.llm add_region 0,0,8,96 "1" "appear" "appear" "fastest" "16000" "left" "middle"
-llm_builder.llm add_text 0,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "$pos:$team"
-llm_builder.llm add_region 8,0,8,96 "1" "appear" "appear" "fastest" "16000" "left" "bottom"   
-llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "$name"
+llm_builder.llm new_msg 0,0,16,96 "normal"\n
+llm_builder.llm add_region 0,0,8,96 "1" "appear" "appear" "fastest" "12000" "left" "middle"\n
+llm_builder.llm add_text 0,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "$pos:$team"\n
+llm_builder.llm add_region 8,0,8,96 "1" "ribbon_left" "ribbon_left" "slow" "5000" "left" "bottom"\n
+llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "$name"\n
 ''')
 
 match_sign_text = Template('''
 llm_builder.llm new_msg 0,0,16,96 "normal"
 llm_builder.llm add_region 0,0,8,96 "1" "appear" "appear" "fastest" "16000" "left" "middle"
-llm_builder.llm add_text 0,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "Now Playing: $curr"
+llm_builder.llm add_text 0,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "On Field: M$curr"
 llm_builder.llm add_region 8,0,8,96 "1" "appear" "appear" "fastest" "16000" "left" "bottom"   
-llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "Next Match:  $next"
+llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "Our Next:  $next"
 ''')
 
 
 
 time_sign_text = Template('''
-                          
+llm_builder.llm new_msg 0,0,16,96 "normal"\n
+llm_builder.llm add_region 0,0,8,96 "1" "appear" "appear" "fastest" "16000" "left" "middle"\n
+llm_builder.llm add_text 0,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "Now Playing: $curr"
+llm_builder.llm add_region 8,0,8,96 "1" "appear" "appear" "slow" "16000" "left" "bottom"   
+llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "Next Match:  $next"
 ''')
 
 
@@ -55,15 +59,19 @@ def update_2l_sign(conn, text):
     color = get_color(conn)
     
     if 'red' in conn.host or 'blue' in conn.host:
-        team_name = team_names[text]
-        team_val = ' ' * (7 - len(text)) + text
+        team_name = '\\"' + team_names[text] + '\\"'
+        team_val = '\\"' + ' ' * (7 - len(text)) + text + '\\"'
+        print(team_val)
         
         if is_sim:
             print(color + "%s:%s" % (conn.host[-1], team_val) + '\n' + team_name + Fore.WHITE)
         
         else:
-            send_file = StringIO(team_sign_text.substitute(pos=conn.host[-1], team=team_val, name=team_name, color=color))
-            conn.put(send_file, 'test.llm')
+            conn.run("rm -f /tmp/test")
+            file_build_str = 'echo -e "' + team_sign_text.substitute(pos=conn.host[-1], team=team_val, name=team_name, color=color) + '" >> /tmp/test'
+            conn.run(file_build_str)
+            conn.run("localmsgs delete -f ALL")
+            conn.run('localmsgs compose -e /tmp/test -f mymsg.llm')
             conn.close()
             
     
@@ -73,7 +81,8 @@ def update_2l_sign(conn, text):
         
         else:
             send_file = StringIO(match_sign_text.substitute(curr=current_match, next=displayed_match, color=color))
-            conn.put(send_file, 'test.llm')
+            #conn.put(send_file, remote='/tmp/test/')
+            #conn.run('localmsgs compose -e /tmp/test -f mymsg.llm')
             conn.close()
     
     if 'spare1' in conn.host:

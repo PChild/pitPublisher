@@ -1,7 +1,7 @@
 {
-    "event": "2023isde1",
-    "team": "frc1577",
-    "is_sim": true,
+    "event": "2022chcmp",
+    "team": "frc401",
+    "is_sim": false,
     "use_simple": false,
     "delay": 15.0,
     "name_lim": 30,
