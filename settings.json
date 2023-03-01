@@ -1,8 +1,10 @@
 {
     "event": "2023isde1",
     "team": "frc1577",
-    "is_sim": false,
+    "is_sim": true,
+    "use_simple": false,
     "delay": 15.0,
+    "name_lim": 30,
     "key": "0h3KMIxalFClzq9o00U2NPG9o2NHrQTTCVkGjv82cxQfeTp0ul49LYv15rH1nk7e",
     "signs": [
         {"name": "info1", "pass": "slim0e4", "loc": "a1"},
