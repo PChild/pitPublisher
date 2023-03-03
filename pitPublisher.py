@@ -23,8 +23,8 @@ current_match = 'NM-2'
 team_sign_text = Template('''
 llm_builder.llm new_msg 0,0,16,96 "normal"\n
 llm_builder.llm add_region 0,0,8,96 "1" "appear" "appear" "fastest" "12000" "left" "middle"\n
-llm_builder.llm add_text 0,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "$pos:$team"\n
-llm_builder.llm add_region 8,0,8,96 "1" "ribbon_left" "ribbon_left" "slow" "5000" "left" "bottom"\n
+llm_builder.llm add_text 0,0,8,96 "1" "8" "bold" "block" "normal" "$color" "black" "none" "none" "--" "$pos:$team"\n
+llm_builder.llm add_region 8,0,8,96 "1" "appear" "appear" "slow" "5000" "left" "bottom"\n
 llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "$name"\n
 ''')
 
@@ -37,13 +37,16 @@ llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "$color" "bl
 ''')
 
 
+# datafield line is still fucked, erroring on last field not present????????
 
 time_sign_text = Template('''
 llm_builder.llm new_msg 0,0,16,96 "normal"\n
-llm_builder.llm add_region 0,0,8,96 "1" "appear" "appear" "fastest" "16000" "left" "middle"\n
-llm_builder.llm add_text 0,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "Now Playing: $curr"
-llm_builder.llm add_region 8,0,8,96 "1" "appear" "appear" "slow" "16000" "left" "bottom"   
-llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "$color" "black" "none" "none" "--" "Next Match:  $next"
+llm_builder.llm add_region 0,0,8,48 "1" "appear" "appear" "fastest" "16000" "left" "middle"\n
+llm_builder.llm add_text 0,0,8,48 "1" "8" "normal" "block" "normal" "yellow" "black" "none" "none" \\""Time Now:\\""\n
+llm_builder.llm add_region 0,49,8,48 "1" "appear" "appear" "slow" "16000" "left" "bottom"\n
+llm_builder.llm add_df "--" 0,49,8,48 "1" "8" "normal" "block" "normal" "yellow" "black" "none" \\""time\\"" "TIME" "65534,65534,1" "24_HH_MM" "ALIGNL" "1"\n 
+llm_builder.llm add_region 8,0,8,96 "1" "appear" "appear" "slow" "16000" "left" "bottom"\n
+llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "yellow" "black" "none" "none" \\""Next Match:  $matchtime\\""\n
 ''')
 
 
@@ -85,9 +88,17 @@ def update_2l_sign(conn, text):
             #conn.run('localmsgs compose -e /tmp/test -f mymsg.llm')
             conn.close()
     
-    if 'spare1' in conn.host:
+    if 'info2' in conn.host:
         if is_sim:
-            print(color + "Scheduled: " + text +"\nPredicted: " + pred_time + Fore.WHITE)
+            print("CURRENT TIME MF")
+        
+        else:
+            conn.run("rm -f /tmp/test")
+            file_build_str = 'echo -e "' + time_sign_text.substitute(matchtime=text) + '" >> /tmp/test'
+            conn.run(file_build_str)
+            conn.run("localmsgs delete -f ALL")
+            #conn.run('localmsgs compose -e /tmp/test -f mymsg.llm')
+            conn.close()
         
 
 # basic function to update an individual sign with specified text and color. 
