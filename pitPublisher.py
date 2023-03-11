@@ -44,7 +44,7 @@ llm_builder.llm new_msg 0,0,16,96 "normal"\n
 llm_builder.llm add_region 0,0,8,48 "1" "appear" "appear" "fastest" "16000" "left" "middle"\n
 llm_builder.llm add_text 0,0,8,48 "1" "8" "normal" "block" "normal" "yellow" "black" "none" "none" \\""Time Now:\\""\n
 llm_builder.llm add_region 0,49,8,48 "1" "appear" "appear" "slow" "16000" "left" "bottom"\n
-llm_builder.llm add_df "--" 0,49,8,48 "1" "8" "normal" "block" "normal" "yellow" "black" "none" \\""time\\"" "TIME" "65534,65534,1" "24_HH_MM" "ALIGNL" "1"\n 
+llm_builder.llm add_df "--" 0,49,8,48 "1" "8" "normal" "block" "normal" "yellow" "black" "none" "none" \\""time\\"" "TIME" "65534,65534,1" "24_HH_MM" "ALIGNL" "0"\n 
 llm_builder.llm add_region 8,0,8,96 "1" "appear" "appear" "slow" "16000" "left" "bottom"\n
 llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "yellow" "black" "none" "none" \\""Next Match:  $matchtime\\""\n
 ''')
@@ -169,7 +169,7 @@ def check_match_status():
         blue_teams = format_team_keys(next_match['alliances']['blue']['team_keys'])
         displayed_match = next_match['comp_level'].upper() + str(next_match['match_number'])
         
-        match_time = time.strftime('%I:%M %p', time.localtime(next_match['time']))
+        match_time = time.strftime('%I:%M', time.localtime(next_match['time']))
         
         print('Updating screens to match', displayed_match)
         update_displays(red_teams, blue_teams, displayed_match, match_time)
