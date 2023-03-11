@@ -22,10 +22,10 @@ current_match = 'NM-2'
 
 team_sign_text = Template('''
 llm_builder.llm new_msg 0,0,16,96 "normal"\n
-llm_builder.llm add_region 0,0,8,96 "1" "appear" "appear" "fastest" "12000" "left" "middle"\n
+llm_builder.llm add_region 0,0,8,96 "1" "appear" "appear" "fastest" "12000" "left" "top"\n
 llm_builder.llm add_text 0,0,8,96 "1" "8" "normal" "block" "condensed" "$color" "black" "none" "none" "--" "$pos:$team"\n
-llm_builder.llm add_region 8,0,8,96 "1" "appear" "appear" "slow" "5000" "left" "bottom"\n
-llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "condensed" "$color" "black" "none" "none" "--" "$name"\n
+llm_builder.llm add_region 9,0,7,96 "1" "appear" "appear" "slow" "5000" "left" "middle"\n
+llm_builder.llm add_text 9,0,7,96 "1" "6" "normal" "block" "condensed" "$color" "black" "none" "none" "--" "$name"\n
 ''')
 
 match_sign_text = Template('''
@@ -43,8 +43,10 @@ llm_builder.llm add_region 0,0,8,52 "1" "appear" "appear" "fastest" "16000" "lef
 llm_builder.llm add_text 0,0,8,52 "1" "8" "normal" "block" "condensed" "yellow" "black" "none" "none" \\""Time Now:\\""
 llm_builder.llm add_region 0,53,8,43 "1" "appear" "appear" "slow" "16000" "left" "bottom"
 llm_builder.llm add_df 0,53,8,43 "1" "8" "normal" "block" "condensed" "yellow" "black" "none" "none" \\""time\\"" "REALTIME" "65534,65534,1" "12_HH_MM" "ALIGNR" "6"
-llm_builder.llm add_region 8,0,8,96 "1" "appear" "appear" "slow" "16000" "left" "bottom"
-llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "condensed" "yellow" "black" "none" "none" \\""Our Next:  $matchtime\\""
+llm_builder.llm add_region 9,0,7,56 "1" "appear" "appear" "slow" "16000" "left" "middle"
+llm_builder.llm add_text 9,0,7,56 "1" "6" "normal" "block" "condensed" "yellow" "black" "none" "none" \\""Our Next:\\""
+llm_builder.llm add_region 9,57,7,39 "1" "appear" "appear" "slow" "16000" "right" "middle"
+llm_builder.llm add_text 9,57,7,39 "1" "6" "normal" "block" "condensed" "yellow" "black" "none" "none" \\""$matchtime\\""
 ''')
 
 
@@ -91,7 +93,7 @@ def update_2l_sign(conn, text):
     
     if 'info2' in conn.host:
         if is_sim:
-            print("CURRENT TIME MF")
+            print("CURRENT TIME:", text)
         
         else:
             conn.run("rm -f /tmp/test")
@@ -170,7 +172,7 @@ def check_match_status():
         blue_teams = format_team_keys(next_match['alliances']['blue']['team_keys'])
         displayed_match = next_match['comp_level'].upper() + str(next_match['match_number'])
         
-        match_time = time.strftime('%I:%M', time.localtime(next_match['time']))
+        match_time = time.strftime('%_I:%M', time.localtime(next_match['predicted_time']))
         
         print('Updating screens to match', displayed_match)
         update_displays(red_teams, blue_teams, displayed_match, match_time)
