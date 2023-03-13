@@ -35,7 +35,6 @@ llm_builder.llm add_region 8,0,8,96 "1" "appear" "appear" "fastest" "16000" "lef
 llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "yellow" "black" "none" "none" "--" \\""Our Next:  $next\\""
 ''')
 
-
 time_sign_text = Template('''
 llm_builder.llm new_msg 0,0,16,96 "normal"
 llm_builder.llm add_region 0,0,8,52 "1" "appear" "appear" "fastest" "16000" "left" "middle"
@@ -71,13 +70,16 @@ def update_2l_sign(conn, text):
     color = get_color(conn)
     
     if 'red' in conn.host or 'blue' in conn.host:
-        team_name = '\\"' + team_names[text] + '\\"'
-        team_val = '\\"' + ' ' * (7 - len(text)) + text + '\\"'
+        team_name = team_names[text]
+        team_val = ' ' * (7 - len(text)) + text 
         
         if is_sim:
             print(color + "%s:%s" % (conn.host[-1], team_val) + '\n' + team_name + Fore.WHITE)
         
         else:
+            team_name = '\\"' + team_name + '\\"'
+            team_val = '\\"' + team_val + '\\"'
+            
             file_build_str = 'echo -e "' + team_sign_text.substitute(pos=conn.host[-1], team=team_val, name=team_name, color=color) + '" >> /tmp/test'
             run_2l_update(conn, file_build_str)
             
@@ -201,7 +203,6 @@ def check_match_status():
             # fuck you microsoft
              match_time = time.strftime('%#I:%M', time.localtime(next_match['predicted_time']))
         
-        print('Updating screens to match', displayed_match)
         update_displays(red_teams, blue_teams, displayed_match, match_time)
         
 # simple func to grab team names when the script starts
