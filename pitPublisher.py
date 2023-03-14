@@ -29,10 +29,14 @@ llm_builder.llm add_text 9,0,7,96 "1" "6" "normal" "block" "condensed" "$color" 
 
 match_sign_text = Template('''
 llm_builder.llm new_msg 0,0,16,96 "normal"
-llm_builder.llm add_region 0,0,8,96 "1" "appear" "appear" "fastest" "16000" "left" "middle"
-llm_builder.llm add_text 0,0,8,96 "1" "8" "normal" "block" "normal" "yellow" "black" "none" "none" "--" \\""On Field:  $curr\\""
-llm_builder.llm add_region 8,0,8,96 "1" "appear" "appear" "fastest" "16000" "left" "bottom"   
-llm_builder.llm add_text 8,0,8,96 "1" "8" "normal" "block" "normal" "yellow" "black" "none" "none" "--" \\""Our Next:  $next\\""
+llm_builder.llm add_region 0,0,8,64 "1" "appear" "appear" "fastest" "16000" "left" "bottom"   
+llm_builder.llm add_text 0,0,8,64 "1" "8" "normal" "block" "condensed" "yellow" "black" "none" "none" "--" \\""On Field:\\""
+llm_builder.llm add_region 0,65,8,31 "1" "appear" "appear" "fastest" "16000" "left" "bottom"   
+llm_builder.llm add_text 0,65,8,31 "1" "8" "normal" "block" "condensed" "yellow" "black" "none" "none" "--" \\""$curr\\""
+llm_builder.llm add_region 9,0,7,64 "1" "appear" "appear" "fastest" "16000" "left" "middle"
+llm_builder.llm add_text 9,0,7,64 "1" "6" "normal" "block" "normal" "yellow" "black" "none" "none" "--" \\""Our Next:\\""
+llm_builder.llm add_region 9,65,7,31 "1" "appear" "appear" "fastest" "16000" "left" "middle"
+llm_builder.llm add_text 9,65,7,31 "1" "6" "normal" "block" "normal" "yellow" "black" "none" "none" "--" \\""$next\\""
 ''')
 
 time_sign_text = Template('''

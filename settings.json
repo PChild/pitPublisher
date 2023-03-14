@@ -1,7 +1,7 @@
 {
     "event": "2023isde3",
     "team": "frc1577",
-    "is_sim": true,
+    "is_sim": false,
     "use_simple": false,
     "delay": 15.0,
     "name_lim": 30,
