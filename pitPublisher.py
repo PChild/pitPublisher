@@ -221,7 +221,9 @@ def check_match_status():
 def get_team_names():
     global team_names
     for team in tba.event_teams(settings['event']):
-        team_names[str(team['team_number'])] = team['nickname'][:settings['name_lim']]
+        base_name = team['nickname']
+        clean_name = ''.join([i if ord(i) < 128 else '' for i in base_name])
+        team_names[str(team['team_number'])] = clean_name[:settings['name_lim']]
 
 # Main function to run code.  
 def main():
