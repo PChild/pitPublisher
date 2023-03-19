@@ -125,10 +125,9 @@ def update_displays(red_teams, blue_teams, match_num, match_time):
     threads = []
     for idx, conn in enumerate(connections):
         conn = SimpleNamespace(host=conn['name']) if is_sim else conn # use sign name as connection if sim
-        if conn.host != 'info1': # handle info1 separately as it updates with the field, not us.
-            t = Thread(target=update_sign, args=(conn, sign_data[idx]))
-            threads.append(t)
-            t.start()
+        t = Thread(target=update_sign, args=(conn, sign_data[idx]))
+        threads.append(t)
+        t.start()
     
     for t in threads:
         t.join()
@@ -165,28 +164,44 @@ def get_current_event_match(event):
             break
     return next_match    
 
-# Helper function to update just the next match sign in its own thread.
+# Helper function to update info signs more regularly.
 def update_now_playing():
-    sign = settings['signs'][0]
-    conn = sign if is_sim else Connection('inova@'+sign['name'], connect_kwargs={'password':sign['pass']})
-    conn = SimpleNamespace(host=conn['name']) if is_sim else conn #use sign name as connection if sim
-    t = Thread(target=update_sign, args=(conn, displayed_match))
-    t.start()
-    t.join()
+    signs = [sign for sign in settings['signs'] if 'info' in sign['name']]
+    connections = signs if is_sim else [Connection('inova@'+sign['name'], connect_kwargs={'password':sign['pass']}) for sign in signs]
+    arg_list = [displayed_match, pred_time]
+
+    threads = []
+    for idx, conn in enumerate(connections):
+        conn = SimpleNamespace(host=conn['name']) if is_sim else conn #use sign name as connection if sim
+        t = Thread(target=update_sign, args=(conn, arg_list[idx]))
+        threads.append(t)
+        t.start()
+    
+    for t in threads:
+        t.join()
+    
+def format_time(next_match):
+    try:
+        return  time.strftime('%_I:%M', time.localtime(next_match['predicted_time']))
+    except:
+        # fuck you microsoft
+        return time.strftime('%#I:%M', time.localtime(next_match['predicted_time']))
 
 # Check if the signs need to be updated by comparing match #, team #s, also logic for now playing
 def check_match_status():   
-    global displayed_match, red_teams, blue_teams, current_match
+    global displayed_match, red_teams, blue_teams, current_match, pred_time
     next_match = get_next_match(settings['team'], settings['event'])
+    pred_time = format_time(next_match)
     new_match = next_match['comp_level'].upper() + str(next_match['match_number'])!= displayed_match
     if new_match:
         displayed_match = next_match['comp_level'].upper() + str(next_match['match_number'])
     
     new_curr = get_current_event_match(settings['event'])
     now_playing = new_curr['comp_level'].upper() + str(new_curr['match_number'])
-    if now_playing != current_match:
+    if now_playing != current_match and not new_match:
         current_match = now_playing        
         update_now_playing()
+        print('updated now playing to', current_match)
     
     
     new_red_teams = format_team_keys(next_match['alliances']['red']['team_keys']) != red_teams
@@ -196,14 +211,7 @@ def check_match_status():
         red_teams = format_team_keys(next_match['alliances']['red']['team_keys'])
         blue_teams = format_team_keys(next_match['alliances']['blue']['team_keys'])
         
-        
-        try:
-            match_time = time.strftime('%_I:%M', time.localtime(next_match['predicted_time']))
-        except:
-            # fuck you microsoft
-             match_time = time.strftime('%#I:%M', time.localtime(next_match['predicted_time']))
-        
-        update_displays(red_teams, blue_teams, displayed_match, match_time)
+        update_displays(red_teams, blue_teams, displayed_match, pred_time)
         
 # simple func to grab team names when the script starts
 def get_team_names():
