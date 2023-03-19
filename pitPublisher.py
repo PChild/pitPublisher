@@ -16,7 +16,7 @@ displayed_match = 'NM-1'
 pred_time = '00:00'
 red_teams = []
 blue_teams = []
-team_names = {}
+team_names = {'0': ''}
 current_match = 'NM-2'
 
 team_sign_text = Template('''
