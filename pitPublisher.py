@@ -188,7 +188,7 @@ def format_time(next_match):
     try:
         return  time.strftime('%_I:%M', time.localtime(next_match['predicted_time']))
     except:
-        # fuck you microsoft
+        # microsoft sucks
         return time.strftime('%#I:%M', time.localtime(next_match['predicted_time']))
 
 # Check if the signs need to be updated by comparing match #, team #s, also logic for now playing
