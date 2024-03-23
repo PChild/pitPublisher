@@ -1,8 +1,9 @@
 {
-    "event": "2023gcmp",
+    "event": "2024vafal",
     "team": "frc401",
     "is_sim": true,
     "use_simple": false,
+    "offline": true,
     "delay": 15.0,
     "name_lim": 30,
     "key": "0h3KMIxalFClzq9o00U2NPG9o2NHrQTTCVkGjv82cxQfeTp0ul49LYv15rH1nk7e",
